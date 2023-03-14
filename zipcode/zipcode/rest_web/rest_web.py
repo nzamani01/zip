@@ -16,7 +16,7 @@ app = Flask(__name__, static_url_path='')
 #connect to database
 conn = mysql.connector.connect(user='root', password='',
                                   host='127.0.0.1',
-                                  database='zip',
+                                  database='zipcode',
                                buffered = True)
 cursor = conn.cursor()
 
@@ -24,7 +24,7 @@ cursor = conn.cursor()
 @app.route('/searchzip/<searchzip>')
 def searchszip(searchzip):
     # Get data from database
-    cursor.execute("SELECT * FROM `zip` WHERE zip=%s", [searchzip])
+    cursor.execute("SELECT * FROM `zipcode` WHERE zip=%s", [searchzip])
     test = cursor.rowcount
     if test != 1:
         return searchzip + " was not found"
@@ -32,16 +32,16 @@ def searchszip(searchzip):
         searched = cursor.fetchall()
         return 'Success! Here you go: %s' % searched
 
-#update zip database population for a specified zip
+#update zipcode database population for a specified zip
 @app.route('/updatezippop/<updatezip> <updatePOP>')
 def updatezippop(updatezip, updatePOP):
-    cursor.execute("SELECT * FROM `zip` WHERE zip=%s", [updatezip])
+    cursor.execute("SELECT * FROM `zipcode` WHERE zip=%s", [updatezip])
     test = cursor.rowcount
     if test != 1:
         return updatezip + " was not found"
     else:
-        cursor.execute("UPDATE `zip` SET Pop = %s WHERE zip= %s;", [updatePOP,updatezip])
-        cursor.execute("SELECT * FROM `zip` WHERE zip=%s and Pop=%s", [updatezip,updatePOP])
+        cursor.execute("UPDATE `zipcode` SET Pop = %s WHERE zip= %s;", [updatePOP,updatezip])
+        cursor.execute("SELECT * FROM `zipcode` WHERE zip=%s and Pop=%s", [updatezip,updatePOP])
         test1 = cursor.rowcount
         if test1 != 1:
             return updatezip + "  failed to update"
@@ -58,8 +58,8 @@ def update():
 #search page
 @app.route('/search', methods=['GET'])
 def search():
-       user = request.args.get('zip')
-       return redirect(url_for('searchstate', searchzip=user))
+       user = request.args.get('szip')
+       return redirect(url_for('searchzip', searchzip=user))
 
 
 #root of web server and gots to template (login.html)
