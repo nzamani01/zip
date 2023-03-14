@@ -22,7 +22,7 @@ cursor = conn.cursor()
 
 #Search zip database
 @app.route('/searchzip/<searchzip>')
-def searchszip(searchzip):
+def searchzip(searchzip):
     # Get data from database
     cursor.execute("SELECT * FROM `zipcode` WHERE zip=%s", [searchzip])
     test = cursor.rowcount
